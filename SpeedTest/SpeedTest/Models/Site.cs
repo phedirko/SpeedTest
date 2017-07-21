@@ -21,8 +21,8 @@ namespace SpeedTest.Models
             }
         }
 
-        public IEnumerable<Url> Urls { get; set; }
+        public virtual ICollection<Url> Urls { get; set; }
 
-        public IEnumerable<Measurement> Measurements { get; set; }
+        public virtual ICollection<Measurement> Measurements { get; set; }
     }
 }

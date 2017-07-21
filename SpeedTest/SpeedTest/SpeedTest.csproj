@@ -160,11 +160,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707171404047_SiteModel.cs" />
-    <Compile Include="Migrations\201707171404047_SiteModel.Designer.cs">
-      <DependentUpon>201707171404047_SiteModel.cs</DependentUpon>
+    <Compile Include="Migrations\201707201339287_SiteAndUrl.cs" />
+    <Compile Include="Migrations\201707201339287_SiteAndUrl.Designer.cs">
+      <DependentUpon>201707201339287_SiteAndUrl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\MeasuredUrl.cs" />
     <Compile Include="Models\Measurement.cs" />
     <Compile Include="Models\Url.cs" />
     <Compile Include="Models\Site.cs" />
@@ -194,6 +195,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\script.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -224,8 +226,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707171404047_SiteModel.resx">
-      <DependentUpon>201707171404047_SiteModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707201339287_SiteAndUrl.resx">
+      <DependentUpon>201707201339287_SiteAndUrl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

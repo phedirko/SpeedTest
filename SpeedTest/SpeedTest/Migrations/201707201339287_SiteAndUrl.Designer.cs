@@ -7,13 +7,13 @@ namespace SpeedTest.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class SiteModel : IMigrationMetadata
+    public sealed partial class SiteAndUrl : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(SiteModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(SiteAndUrl));
         
         string IMigrationMetadata.Id
         {
-            get { return "201707171404047_SiteModel"; }
+            get { return "201707201339287_SiteAndUrl"; }
         }
         
         string IMigrationMetadata.Source
