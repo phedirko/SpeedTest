@@ -1,27 +1,14 @@
 ﻿function TestSite() {
     var url = document.getElementById('siteAddress').value;
 
-    $.get('/home/Measure', { siteUrl: url},
+    $.post('/home/Measure', { siteUrl: url},
     function (returnedData) {
-        console.log(returnedData);
+        AddToTable(returnedData);
     });
 }
 
-function AddTable() {
-    var obj = [
-        {
-            url: "http://dsadas.dsd",
-            time: 13123,
-        },
-        {
-            url: "http://dsadadsaqs.dsd",
-            time: 132123,
-        },
-        {
-            url: "http://abc.ua",
-            time: 678,
-        }
-    ]
+function AddTable(obj) {
+
     var tbl = $("<table/>").attr("id", "mytable");
     $("#div1").append(tbl);
     for (var i = 0; i < obj.length; i++) {
@@ -35,7 +22,7 @@ function AddTable() {
     }
 }
 
-function AddToTable(Urls) {
+function AddToTable(urls) {
     var obj = urls;
 
     for (var i = 0; i < obj.length; i++) {

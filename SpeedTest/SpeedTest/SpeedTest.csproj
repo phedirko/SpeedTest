@@ -162,6 +162,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HttpRequestHelper.cs" />
+    <Compile Include="Helpers\RequestFactory.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
     <Compile Include="MeasuredUrlViewModel.cs" />
     <Compile Include="Migrations\201707201339287_SiteAndUrl.cs" />

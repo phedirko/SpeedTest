@@ -43,18 +43,15 @@ namespace SpeedTest.Controllers
 
             var urlsFromSitemap = Helpers.XmlHelper.Deserialize(sitemapXml);
 
-            s.Urls = s.Urls.Take(10).ToList();
-
             foreach(var url in urlsFromSitemap.Urls)
             {
                 s.Urls.Add(new Url { Location = url.Loc });
             }
 
             var m = new Measurement();
-            
-            foreach(var url in s.Urls)
-            {
 
+            foreach(var url in s.Urls.Take(200))
+            {
                 var mUrl = new MeasuredUrl();
                 mUrl.Url = url;
                 
