@@ -17,16 +17,6 @@ namespace SpeedTest
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            using(var ctx = new STdbcontext())
-            {
-                ctx.Set<Site>().Add(new Site
-                {
-                    Address = "adads",
-                    Measurements = new List<Measurement>(),
-                    Urls = new List<Url>()
-                });
-            }
         }
     }
 }

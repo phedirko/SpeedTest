@@ -8,6 +8,12 @@ namespace SpeedTest.Models
 {
     public class Site
     {
+        public Site()
+        {
+            Urls = new List<Url>();
+            Measurements = new List<Measurement>();
+        }
+
         public int Id { get; set; }
 
         public string Address { get; set; }

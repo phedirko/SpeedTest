@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,6 +20,19 @@ namespace SpeedTest.Helpers
             }
 
             return responseResult;
+        }
+
+        public static async Task<TimeSpan> MeasureResponseTime(string url)
+        {
+            var sw = new Stopwatch();
+            using(var client = new HttpClient())
+            {
+                sw.Start();
+                await client.GetAsync(url);
+                sw.Stop();
+            }
+
+            return sw.Elapsed;
         }
     }
 }

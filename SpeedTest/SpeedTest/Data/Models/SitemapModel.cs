@@ -22,7 +22,7 @@ namespace SpeedTest.Models
     public class Urlset
     {
         [XmlElement(ElementName = "url", Namespace = "http://www.sitemaps.org/schemas/sitemap/0.9")]
-        public List<UrlXml> Url { get; set; }
+        public List<UrlXml> Urls { get; set; }
         [XmlAttribute(AttributeName = "xmlns")]
         public string Xmlns { get; set; }
         [XmlAttribute(AttributeName = "xhtml", Namespace = "http://www.w3.org/2000/xmlns/")]
