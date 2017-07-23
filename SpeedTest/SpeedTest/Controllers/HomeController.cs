@@ -48,7 +48,7 @@ namespace SpeedTest.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            var x = _siteRepository.GetSites().ToList();
 
             return View();
         }

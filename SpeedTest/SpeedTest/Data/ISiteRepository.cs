@@ -12,6 +12,7 @@ namespace SpeedTest.Data
         IEnumerable<Site> GetSites();
         Site GetSiteById(string id);
         void InsertSite(Site site);
+        Site GetSiteByUrl(string url);
         void DeleteSite(string id);
         void UpdateSite(Site site);
         void Save();

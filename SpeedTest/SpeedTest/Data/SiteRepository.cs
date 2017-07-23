@@ -25,6 +25,11 @@ namespace SpeedTest.Data.Models
             return _context.Sites.Find(id);
         }
 
+        public Site GetSiteByUrl(string url)
+        {
+            return _context.Sites.Where(x => x.Address.Equals(url)).FirstOrDefault();
+        }
+
         public void InsertSite(Site site)
         {
             _context.Sites.Add(site);

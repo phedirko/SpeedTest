@@ -15,42 +15,68 @@ namespace SpeedTest.Services
 
         public static async Task<IEnumerable<MeasuredUrl>> ProcessRequest(string siteUrl)
         {
+            string siteAddr = siteUrl;
+
             if (!siteUrl.StartsWith("http://"))
                 siteUrl = "http://" + siteUrl;
 
-            Site site = new Site
+
+
+            Site site = _siterepo.GetSiteByUrl(siteUrl);
+            Measurement m;
+            if(site == null)
             {
-                Address = siteUrl,
-            };
-           
-            var m = new Measurement();
-            
-            var sitemapXml = await Helpers.HttpRequestHelper.GetResponseString(site.SitemapAddress);
-            var urlset = Helpers.XmlHelper.Deserialize(sitemapXml);
+                site = new Site
+                {
+                    Address = siteUrl,
+                   
+                };
 
-            var urlsToMeasure = GetUrls(GetLocsFromUrlset(urlset)).ToList();
-            ((List<Url>)site.Urls).AddRange(urlsToMeasure);
+                var sitemapXml = await Helpers.HttpRequestHelper.GetResponseString(site.SitemapAddress);
+                var urlset = Helpers.XmlHelper.Deserialize(sitemapXml);
 
-            var measuredUrls = await Helpers.RequestFactory.ConcurrentMeasure(site.Urls);
+                var urlsToMeasure = GetUrls(GetLocsFromUrlset(urlset)).ToList();
+                ((List<Url>)site.Urls).AddRange(urlsToMeasure);
 
-            m.MeasuredUrls = measuredUrls.ToList();
-            m.DateOfMeasuring = DateTime.Now;
-            site.Measurements.Add(m);
-
-
-            try
-            {
+                m = await GetMeasurement(urlsToMeasure);
+                site.Measurements.Add(m);
 
                 _siterepo.InsertSite(site);
-                _siterepo.Save();
-            } catch(Exception ex)
+
+            }
+            else
             {
+                var sitemapXml = await Helpers.HttpRequestHelper.GetResponseString(site.SitemapAddress);
+                var urlset = Helpers.XmlHelper.Deserialize(sitemapXml);
+
+                var urlsToMeasure = GetUrls(GetLocsFromUrlset(urlset)).ToList();
+                ((List<Url>)site.Urls).AddRange(urlsToMeasure);
+                site.Urls = site.Urls
+                    .GroupBy(u => u.Location)
+                    .Select(u => u.First())
+                    .ToList();
+                m = await GetMeasurement(urlsToMeasure);
+                site.Measurements.Add(m);
+
+                _siterepo.UpdateSite(site);
 
             }
 
-            return m.MeasuredUrls;
+            _siterepo.Save();
 
-            
+            return m.MeasuredUrls;     
+        }
+
+        private static async Task<Measurement> GetMeasurement(IEnumerable<Url> urls)
+        {
+
+            var m = new Measurement();
+
+            var measuredUrls = await Helpers.RequestFactory.ConcurrentMeasure(urls);
+            m.MeasuredUrls = measuredUrls.ToList();
+            m.DateOfMeasuring = DateTime.Now;
+
+            return m;
         }
 
         private static IEnumerable<string> GetLocsFromUrlset(Urlset urlset)
