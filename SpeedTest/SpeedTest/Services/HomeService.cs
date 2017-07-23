@@ -72,6 +72,7 @@ namespace SpeedTest.Services
 
             var m = new Measurement();
 
+            //todo: make not static
             var measuredUrls = await Helpers.RequestFactory.ConcurrentMeasure(urls);
             m.MeasuredUrls = measuredUrls.ToList();
             m.DateOfMeasuring = DateTime.Now;

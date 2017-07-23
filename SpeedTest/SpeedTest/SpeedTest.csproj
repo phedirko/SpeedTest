@@ -160,6 +160,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SitesController.cs" />
     <Compile Include="Data\ISiteRepository.cs" />
     <Compile Include="Data\Models\MeasuredUrl.cs" />
     <Compile Include="Data\SiteRepository.cs" />
@@ -224,6 +225,11 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Sites\Create.cshtml" />
+    <Content Include="Views\Sites\Delete.cshtml" />
+    <Content Include="Views\Sites\Details.cshtml" />
+    <Content Include="Views\Sites\Edit.cshtml" />
+    <Content Include="Views\Sites\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

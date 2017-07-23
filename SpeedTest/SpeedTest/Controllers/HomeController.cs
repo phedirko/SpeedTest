@@ -32,6 +32,7 @@ namespace SpeedTest.Controllers
 
         public async Task<ActionResult> Measure(string siteUrl)
         {
+            //todo: make not static
             var measuredUrls = await HomeService.ProcessRequest(siteUrl);
 
             return Json(ToVM(measuredUrls));

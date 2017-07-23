@@ -1,0 +1,40 @@
+﻿@model SpeedTest.Models.Site
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<!--TODO: add styles-->
+<div>
+    <h4>Site</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dd>
+           @foreach(var m in Model.Measurements)
+           {
+               <h3>@m.DateOfMeasuring</h3>
+               <h3>@m.Id</h3>
+               foreach (var url in m.MeasuredUrls)
+               {
+                   <p>@url.Url</p>
+
+                   <p>@url.ElapsedTime</p>
+               }
+           }
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
