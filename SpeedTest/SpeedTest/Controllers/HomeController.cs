@@ -1,6 +1,7 @@
 ﻿using SpeedTest.Data;
 using SpeedTest.Data.Models;
 using SpeedTest.Models;
+using SpeedTest.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,52 +32,19 @@ namespace SpeedTest.Controllers
 
         public async Task<ActionResult> Measure(string siteUrl)
         {
-            if (!siteUrl.StartsWith("http://"))
-                siteUrl = "http://" + siteUrl;
+            var measuredUrls = await HomeService.ProcessRequest(siteUrl);
 
-            Site s = new Site
-            {
-                Address = siteUrl
-            };
-
-            var sitemapXml = await Helpers.HttpRequestHelper.GetResponseString(s.SitemapAddress);
-
-            var urlsFromSitemap = Helpers.XmlHelper.Deserialize(sitemapXml);
-
-            foreach(var url in urlsFromSitemap.Urls)
-            {
-                s.Urls.Add(new Url { Location = url.Loc });
-            }
-
-            var m = new Measurement();
-
-            foreach(var url in s.Urls.Take(200))
-            {
-                var mUrl = new MeasuredUrl();
-                mUrl.Url = url;
-                
-                var respTime = await Helpers.HttpRequestHelper.MeasureResponseTime(url.Location);
-
-                mUrl.ElapsedTime = respTime;
-                m.MeasuredUrls.Add(mUrl);
-            }
-
-            s.Measurements.Add(m);
-
-            return Json(GetListOfUrlVMs(m.MeasuredUrls.ToList()));
+            return Json(ToVM(measuredUrls));
         }
 
-        private IEnumerable<MeasuredUrlViewModel> GetListOfUrlVMs(List<MeasuredUrl> urls)
+        private IEnumerable<MeasuredUrlViewModel> ToVM(IEnumerable<MeasuredUrl> mUrls)
         {
-            foreach(var u in urls)
+            foreach(var url in mUrls)
             {
-                yield return new MeasuredUrlViewModel
-                {
-                    url = u.Url.Location,
-                    time = u.ElapsedTime.TotalMilliseconds.ToString()
-                };
+                yield return new MeasuredUrlViewModel { url = url.Url, time = url.ElapsedTime.ToString() };
             }
         }
+
 
         public ActionResult About()
         {

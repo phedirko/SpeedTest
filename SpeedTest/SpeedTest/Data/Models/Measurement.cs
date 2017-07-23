@@ -18,7 +18,7 @@ namespace SpeedTest.Models
         public DateTime DateOfMeasuring { get; set; }
 
         public virtual ICollection<MeasuredUrl> MeasuredUrls { get; set; }
-
+        
         public virtual Site Site { get; set; }
     }
 }

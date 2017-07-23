@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SpeedTest.Data;
+using SpeedTest.Models;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,22 +14,27 @@ namespace SpeedTest.Helpers
 {
     public static class RequestFactory
     {
-        static int i = 0;
+        private static ConcurrentBag<MeasuredUrl> bag = new ConcurrentBag<MeasuredUrl>();
 
-        public static async Task MeasureInParallel(List<string> urls)
-        { 
-            var tasks = new List<Task<TimeSpan>>();
+        public static async Task<IEnumerable<MeasuredUrl>> ConcurrentMeasure(IEnumerable<Url> urls)
+        {
+            bag = null;
 
-            foreach(var url in urls)
+            bag = new ConcurrentBag<MeasuredUrl>();
+
+            var tasks = new List<Task>();
+
+            foreach (var url in urls)
             {
                 tasks.Add(GetUrl(url));
             }
 
             await Task.WhenAll(tasks);
+
+            return bag;
         }
 
-
-        private static async Task<TimeSpan> GetUrl(string url)
+        private static async Task GetUrl(Url url)
         {
             var sw = new Stopwatch();
 
@@ -35,20 +43,15 @@ namespace SpeedTest.Helpers
                 sw.Start();
                 try
                 {
-                    await client.GetAsync(url);
+                    await client.GetAsync(url.Location);
                 }
                 catch (Exception x)
                 {
                 }
                 sw.Stop();
+                bag.Add(new MeasuredUrl { Url = url.Location, ElapsedTime = sw.Elapsed });
+
             }
-
-            Interlocked.Increment(ref i);    
-
-            Console.WriteLine($"{url.Replace("http://", "")} : {sw.Elapsed.Milliseconds} i: {i}");
-            Console.WriteLine();
-
-            return sw.Elapsed;
         }
     }
 }

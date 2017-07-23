@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Reflection.Emit;
 
 namespace SpeedTest
 {
@@ -10,6 +11,10 @@ namespace SpeedTest
         public STdbcontext()
             :base("DbConnection")
         { }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+        }
 
         public DbSet<Site> Sites { get; set; }
 

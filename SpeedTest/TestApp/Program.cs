@@ -28,23 +28,22 @@ namespace TestApp
         {
             var sw = new Stopwatch();
 
-            string xml = await HttpRequestHelper.GetResponseString("https://dou.ua/sitemap-forums.xml");
+            string xml = await HttpRequestHelper.GetResponseString("http://gymnasium152.edu.kh.ua/sitemap.xml");
 
             var urls = XmlHelper.Deserialize(xml).Urls;
 
             var listOfUrls = new List<string>();
 
-            foreach(var url in urls.Take(4000))
+            urls = urls.ToList();
+
+            foreach (var url in urls)
             {
                 listOfUrls.Add(url.Loc);
             }
 
-            sw.Start();
-            await RequestFactory.MeasureInParallel(listOfUrls);
-            sw.Stop();
 
-            Console.WriteLine();
-            Console.WriteLine(sw.ElapsedMilliseconds);
+
+            
         }
     }
 }
