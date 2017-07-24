@@ -17,6 +17,8 @@ namespace SpeedTest.Services
         {
             string siteAddr = siteUrl;
 
+
+            //todo: normal formatting
             if (!siteUrl.StartsWith("http://"))
                 siteUrl = "http://" + siteUrl;
 

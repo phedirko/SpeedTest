@@ -45,7 +45,7 @@ namespace SpeedTest.Helpers
                 {
                     await client.GetAsync(url.Location);
                 }
-                catch (Exception x)
+                catch
                 {
                 }
                 sw.Stop();

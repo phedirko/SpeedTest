@@ -35,7 +35,7 @@ namespace SpeedTest.Controllers
             //todo: make not static
             var measuredUrls = await HomeService.ProcessRequest(siteUrl);
 
-            return Json(ToVM(measuredUrls));
+            return Json(ToVM(measuredUrls).OrderByDescending(x=> x.time));
         }
 
         private IEnumerable<MeasuredUrlViewModel> ToVM(IEnumerable<MeasuredUrl> mUrls)
