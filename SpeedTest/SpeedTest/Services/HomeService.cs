@@ -1,5 +1,6 @@
 ﻿using SpeedTest.Data;
 using SpeedTest.Data.Models;
+using SpeedTest.Helpers;
 using SpeedTest.Models;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,24 @@ using System.Web;
 
 namespace SpeedTest.Services
 {
-    public static class HomeService
+    public class HomeService : IHomeService
     {
-        private static ISiteRepository _siterepo = new SiteRepository(new STdbcontext());
+        public HomeService(ISiteRepository siteRepo, IRequestFactory reqFactory)
+        {
+            _siterepo = siteRepo;
+            _reqFactory = reqFactory;
+        }
 
-        public static async Task<IEnumerable<MeasuredUrl>> ProcessRequest(string siteUrl)
+        private readonly ISiteRepository _siterepo;
+        private readonly IRequestFactory _reqFactory;
+
+        public async Task<IEnumerable<MeasuredUrl>> ProcessRequest(string siteUrl)
         {
             string siteAddr = siteUrl;
 
-
-            //todo: normal formatting
-            if (!siteUrl.StartsWith("http://"))
+            
+            if (!siteUrl.StartsWith("http://") && !siteUrl.StartsWith("https://"))
                 siteUrl = "http://" + siteUrl;
-
 
 
             Site site = _siterepo.GetSiteByUrl(siteUrl);
@@ -34,8 +40,8 @@ namespace SpeedTest.Services
                    
                 };
 
-                var sitemapXml = await Helpers.HttpRequestHelper.GetResponseString(site.SitemapAddress);
-                var urlset = Helpers.XmlHelper.Deserialize(sitemapXml);
+                var sitemapXml = await HttpRequestHelper.GetResponseString(site.SitemapAddress);
+                var urlset = XmlHelper.Deserialize(sitemapXml);
 
                 var urlsToMeasure = GetUrls(GetLocsFromUrlset(urlset)).ToList();
                 ((List<Url>)site.Urls).AddRange(urlsToMeasure);
@@ -48,8 +54,8 @@ namespace SpeedTest.Services
             }
             else
             {
-                var sitemapXml = await Helpers.HttpRequestHelper.GetResponseString(site.SitemapAddress);
-                var urlset = Helpers.XmlHelper.Deserialize(sitemapXml);
+                var sitemapXml = await HttpRequestHelper.GetResponseString(site.SitemapAddress);
+                var urlset = XmlHelper.Deserialize(sitemapXml);
 
                 var urlsToMeasure = GetUrls(GetLocsFromUrlset(urlset)).ToList();
                 ((List<Url>)site.Urls).AddRange(urlsToMeasure);
@@ -69,25 +75,24 @@ namespace SpeedTest.Services
             return m.MeasuredUrls;     
         }
 
-        private static async Task<Measurement> GetMeasurement(IEnumerable<Url> urls)
+        private async Task<Measurement> GetMeasurement(IEnumerable<Url> urls)
         {
 
             var m = new Measurement();
 
-            //todo: make not static
-            var measuredUrls = await Helpers.RequestFactory.ConcurrentMeasure(urls);
+            var measuredUrls = await _reqFactory.ConcurrentMeasure(urls);
             m.MeasuredUrls = measuredUrls.ToList();
             m.DateOfMeasuring = DateTime.Now;
 
             return m;
         }
 
-        private static IEnumerable<string> GetLocsFromUrlset(Urlset urlset)
+        private IEnumerable<string> GetLocsFromUrlset(Urlset urlset)
         {
             return urlset.Urls.Select(x => x.Loc);
         }
 
-        private static IEnumerable<Url> GetUrls(IEnumerable<string> urls)
+        private IEnumerable<Url> GetUrls(IEnumerable<string> urls)
         {
             foreach(var url in urls)
             {

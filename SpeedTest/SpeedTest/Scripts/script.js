@@ -1,9 +1,12 @@
 ﻿function TestSite() {
     var url = document.getElementById('siteAddress').value;
+    var alert = document.getElementById('waitAlert');
+    alert.style.visibility = "visible";
 
     $.post('/home/Measure', { siteUrl: url},
     function (returnedData) {
         AddToTable(returnedData);
+        alert.style.visibility = "hidden";
     });
 }
 

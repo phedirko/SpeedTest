@@ -12,16 +12,12 @@ using System.Web;
 
 namespace SpeedTest.Helpers
 {
-    public static class RequestFactory
+    public class RequestFactory : IRequestFactory
     {
-        private static ConcurrentBag<MeasuredUrl> bag = new ConcurrentBag<MeasuredUrl>();
+        private ConcurrentBag<MeasuredUrl> bag = new ConcurrentBag<MeasuredUrl>();
 
-        public static async Task<IEnumerable<MeasuredUrl>> ConcurrentMeasure(IEnumerable<Url> urls)
+        public async Task<IEnumerable<MeasuredUrl>> ConcurrentMeasure(IEnumerable<Url> urls)
         {
-            bag = null;
-
-            bag = new ConcurrentBag<MeasuredUrl>();
-
             var tasks = new List<Task>();
 
             foreach (var url in urls)
@@ -34,7 +30,7 @@ namespace SpeedTest.Helpers
             return bag;
         }
 
-        private static async Task GetUrl(Url url)
+        private async Task GetUrl(Url url)
         {
             var sw = new Stopwatch();
 

@@ -1,5 +1,6 @@
 ﻿using SpeedTest.Data;
 using SpeedTest.Data.Models;
+using SpeedTest.Helpers;
 using SpeedTest.Models;
 using SpeedTest.Services;
 using System;
@@ -14,15 +15,12 @@ namespace SpeedTest.Controllers
     public class HomeController : Controller
     {
         private readonly ISiteRepository _siteRepository;
+        private readonly IHomeService _homeService;
 
         public HomeController()
         {
-            this._siteRepository = new SiteRepository(new STdbcontext());
-        }
-
-        public HomeController(ISiteRepository siteRepository)
-        {
-            _siteRepository = siteRepository;
+            _siteRepository = new SiteRepository(new STdbcontext());
+            _homeService = new HomeService(_siteRepository, new RequestFactory());
         }
 
         public ActionResult Index()
@@ -33,7 +31,7 @@ namespace SpeedTest.Controllers
         public async Task<ActionResult> Measure(string siteUrl)
         {
             //todo: make not static
-            var measuredUrls = await HomeService.ProcessRequest(siteUrl);
+            var measuredUrls = await _homeService.ProcessRequest(siteUrl);
 
             return Json(ToVM(measuredUrls).OrderByDescending(x=> x.time));
         }

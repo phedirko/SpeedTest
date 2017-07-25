@@ -43,54 +43,6 @@ namespace SpeedTest.Controllers
             return View();
         }
 
-        // POST: Sites/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Address")] Site site)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Sites.Add(site);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            return View(site);
-        }
-
-        // GET: Sites/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Site site = await db.Sites.FindAsync(id);
-            if (site == null)
-            {
-                return HttpNotFound();
-            }
-            return View(site);
-        }
-
-        // POST: Sites/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Address")] Site site)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(site).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(site);
-        }
-
         // GET: Sites/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
